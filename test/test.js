@@ -65,7 +65,28 @@ describe( 'StringBuilder', function() {
 			expect(sb.buffer).to.have.length(5);
 			expect(result).to.equal('Mom, can you please please please buy me an ice cream');
 
-		})
+		});
 	});
+
+	describe( '#catIf', function(){
+		var result;
+		it('Given a boolean as last parameter, will run as cat and concatenate if the condition is true', function(){
+			var sb = new stringBuilder();
+			sb.cat('this will').catIf( ' be', ' concatenated', true);
+
+			result = sb.string();
+
+			expect(result).to.equal('this will be concatenated');
+
+		});
+		it('Given a boolean as last parameter, will not concatenate if the condition is false', function(){
+			var sb = new stringBuilder();
+			sb.cat('this will not').catIf( ' be', ' concatenated', false);
+
+			result = sb.string();
+
+			expect(result).to.equal('this will not');
+		})
+	})
 
 });
