@@ -63,6 +63,17 @@
 
 			return this;
 
+		},
+
+		catIf : function(){
+			var args = Array.prototype.slice.call(arguments),
+			condition = args.pop();
+
+			if( condition ) {
+				this.cat.apply(this, args)
+			}
+
+			return this;
 		}
 	}
 
