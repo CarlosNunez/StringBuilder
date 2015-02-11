@@ -68,7 +68,7 @@ describe( 'StringBuilder', function() {
 		});
 	});
 
-	describe( '#catIf', function(){
+	describe( '#catIf()', function(){
 		var result;
 		it('Given a boolean as last parameter, will run as cat and concatenate if the condition is true', function(){
 			var sb = new stringBuilder();
@@ -86,7 +86,51 @@ describe( 'StringBuilder', function() {
 			result = sb.string();
 
 			expect(result).to.equal('this will not');
-		})
-	})
+		});
+	});
+
+	describe( '#wrap()', function(){
+		var result;
+		it('Given the arguments, will add a prefix and suffix to the string',function(){
+			var sb = new stringBuilder();
+			sb.wrap('<li>', '</li>').cat('list item');
+			result = sb.string();
+
+			expect(result).to.equal('<li>list item</li>');
+		});
+	});
+
+	describe( '#prefix()', function(){
+		var result;
+		it('Given the arguments, will add a prefix to the string',function(){
+			var sb = new stringBuilder();
+			sb.prefix('-').cat('list item');
+			result = sb.string();
+
+			expect(result).to.equal('-list item');
+		});
+	});
+
+	describe( '#suffix()', function(){
+		var result;
+		it('Given the arguments, will add a suffix to the string',function(){
+			var sb = new stringBuilder();
+			sb.suffix('!').cat('list item');
+			result = sb.string();
+
+			expect(result).to.equal('list item!');
+		});
+	}); 
+
+	describe( '#end()', function(){
+		var result;
+		it('Will add a prefix and suffix to the string on the first cat, but not on the second',function(){
+			var sb = new stringBuilder();
+			sb.cat('<ul>').wrap('<li>', '</li>').cat('list item').end().cat('</ul>');
+			result = sb.string();
+
+			expect(result).to.equal('<ul><li>list item</li></ul>');
+		});
+	});
 
 });
