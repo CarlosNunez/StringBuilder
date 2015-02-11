@@ -5,14 +5,7 @@ chai.config.includeStack = true;
 
 assert = chai.assert;
 
-describe( 'Array', function(){
-  	describe( '#indexOf()', function(){
-	    it( 'should return -1 when the value is not present', function(){
-	      assert.equal(-1, [1,2,3].indexOf(5));
-	      assert.equal(-1, [1,2,3].indexOf(0));
-	    });
-  	});
-});
+
 
 describe( 'StringBuilder', function(){
 	describe( '#cat()', function(){
@@ -45,6 +38,17 @@ describe( 'StringBuilder', function(){
 			assert.equal(bufferLen, 1);
 			assert.equal(sb.buffer[0], "hello world");
 		});
+
+		it( 'given a function that returns an array that has a function, should still work and add all the elements correctly', function(){
+			var sb = new stringBuilder();
+			sb.cat('hello', function(){ return [ function(){ return 'world' }, 'this', 'is']}, 'some', 'crazy', 'stuff');
+
+			bufferLen = sb.buffer.length;
+
+			assert.equal(bufferLen, 7);
+			assert.equal(sb.buffer[1], 'world');
+
+		})
 
 	})
 });

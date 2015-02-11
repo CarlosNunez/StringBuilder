@@ -13,23 +13,30 @@
     is_function = function(value) {
         return typeof value === "function";
     };
-
+ 
 
 	strBuilder.prototype = {
 		cat : function() {
-			var args = Array.prototype.slice.call(arguments),
-			i,
-			len = args.length,
-			value;
+			var len = arguments.length,
+		i,
+		value,
+		result;
+		for ( i = 0; i < len ; i += 1 ) {
+			value = arguments[i];
 
-			for ( i = 0; i < len ; i += 1 ) {
-				value = args[i];
-				this.buffer.push(value)
+			if( is_function(value) ){				
+				result = value.apply(this);
+				this.cat.call(this, result);
 
+			}else if( is_array(value) ) {
+				this.cat.apply(this, value); 
+			}else {
+				this.buffer.push(value);
 			}
-			return this;
 		}
 
+		return this;
+		}
 	}
 
 	exports.stringBuilder = strBuilder;
