@@ -1,0 +1,14 @@
+{
+  	"name": "string-builder",
+  	"version": "0.0.1",
+  	"description": "Extensions to the array prototype.",
+  	"private": true,
+  	"author": "Carlos Nunez cnunez@nearsoft.com",
+	"dependencies": {
+		"chai": "*",
+	  	"mocha": "*"
+	},
+	"scripts": {
+		"test": "mocha" 
+	}
+}
