@@ -41,6 +41,11 @@
 			var resultString = this.buffer.join('');
 
 			return resultString;
+		},
+
+		rep : function () {
+
+
 		}
 	}
 

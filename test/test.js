@@ -51,7 +51,20 @@ describe( 'StringBuilder', function() {
 			expect(sb.buffer).to.have.length(7);
 			expect(result).to.equal( 'hello world this is some crazy stuff' );	
 
-		})
+		});
 
-	})
+	});
+
+	describe( '#rep()', function(){
+		var result;
+		it('Given a a string, and a number, will concatenate the string the specified number of times', function(){
+			var sb = new stringBuilder();
+			sb.cat('Mom, can you').rep(' please', 3).cat(' buy me an ice cream');
+			result = sb.string();
+
+			expect(sb.buffer).to.have.length(5);
+			expect(result).to.equal('Mom, can you please please please buy me an ice cream');
+
+		})
+	});
 });
