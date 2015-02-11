@@ -2,8 +2,7 @@
 	"use strict";
 
 	var strBuilder = function(){
-		this.buffer = [],
-		this.builtString;
+		this.buffer = [];
 	},
 
     is_array = function(value) {
@@ -36,6 +35,12 @@
 		}
 
 		return this;
+		},
+
+		string : function(){
+			var resultString = this.buffer.join('');
+
+			return resultString;
 		}
 	}
 
