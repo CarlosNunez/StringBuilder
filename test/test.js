@@ -67,4 +67,5 @@ describe( 'StringBuilder', function() {
 
 		})
 	});
+
 });
