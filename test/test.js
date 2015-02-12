@@ -70,7 +70,7 @@ describe( 'StringBuilder', function() {
 
 	describe( '#catIf()', function(){
 		var result;
-		it('Given a boolean as last parameter, will run as cat and concatenate if the condition is true', function(){
+		it('Given a boolean as last parameter, will run as cat and concatenate if the condition is true', function() { 
 			var sb = new stringBuilder();
 			sb.cat('this will').catIf( ' be', ' concatenated', true);
 
@@ -79,7 +79,7 @@ describe( 'StringBuilder', function() {
 			expect(result).to.equal('this will be concatenated');
 
 		});
-		it('Given a boolean as last parameter, will not concatenate if the condition is false', function(){
+		it('Given a boolean as last parameter, will not concatenate if the condition is false', function() {
 			var sb = new stringBuilder();
 			sb.cat('this will not').catIf( ' be', ' concatenated', false);
 
@@ -91,14 +91,14 @@ describe( 'StringBuilder', function() {
 
 	describe( '#wrap()', function(){
 		var result;
-		it('Given the arguments, will add a prefix and suffix to the string',function(){
+		it('Given the arguments, will add a prefix and suffix to the string', function() {
 			var sb = new stringBuilder();
 			sb.wrap('<li>', '</li>').cat('list item');
 			result = sb.string();
 			expect(result).to.equal('<li>list item</li>');
 		});
 
-		it('Given the arguments, will add the prefix to all strings concatenated after the wrap call', function(){
+		it('Given the arguments, will add the prefix to all strings concatenated after the wrap call', function() { 
 			var sb = new stringBuilder();
 			sb.wrap('<li>', '</li>').cat('list item').rep('more list items', 3);
 			result = sb.string();
@@ -106,7 +106,7 @@ describe( 'StringBuilder', function() {
 			expect(result).to.equal('<li>list item</li><li>more list items</li><li>more list items</li><li>more list items</li>');
 		});
 
-		it('Calling the wrap more than once will wrap the next strings in all the wraps before', function(){ 
+		it('Calling the wrap more than once will wrap the next strings in all the wraps before', function() { 
 			var sb = new stringBuilder();
 			sb.wrap('<div>', '</div>').wrap('<p>','</p>').cat('content');
 			result = sb.string();
@@ -119,33 +119,33 @@ describe( 'StringBuilder', function() {
 
 	describe( '#prefix()', function(){
 		var result;
-		it('Given the arguments, will add a prefix to the string',function(){
+		it('Given the arguments, will add a prefix to the string', function() {
 			var sb = new stringBuilder();
 			sb.prefix('-').cat('list item');
 			result = sb.string();
 
 			expect(result).to.equal('-list item');
 		});
-		it('Given the arguments, will add prefix to all the following concatenated strings',function(){
+		it('Given the arguments, will add prefix to all the following concatenated strings', function() {
 			var sb = new stringBuilder();
 			sb.prefix('sub').rep('marine ', 3);
 			result = sb.string();
 
-			expect(result).to.equal('submarine submarine submarine');
+			expect(result).to.equal('submarine submarine submarine ');
 		});
-		it('Calling prefix several times will add all prefixes to the following string',function(){
+		it('Calling prefix several times will add all prefixes to the following string', function() {
 			var sb = new stringBuilder();
-			sb.prefix('yellow').preix(' sub').cat('marine');
+			sb.prefix('yellow').prefix(' sub').cat('marine');
 			result = sb.string();
 
-			expect('result').to.equal('yellow submarine');
-		})
+			expect(result).to.equal('yellow submarine');
+		});
 
 	});
 
 	describe( '#suffix()', function(){
 		var result;
-		it('Given the arguments, will add a suffix to the string',function(){
+		it('Given the arguments, will add a suffix to the string', function() {
 			var sb = new stringBuilder();
 			sb.suffix('!').cat('list item');
 			result = sb.string();
@@ -153,15 +153,15 @@ describe( 'StringBuilder', function() {
 			expect(result).to.equal('list item!');
 		});
 
-		it('Given the argument, will add the suffix to all the following concatenated strings',function(){
-			var sb = new StringBuilder();
+		it('Given the argument, will add the suffix to all the following concatenated strings', function() {
+			var sb = new stringBuilder();
 			sb.suffix('!').cat('this').cat('is').cat('sparta');
 			result = sb.string();
 
 			expect(result).to.equal('this!is!sparta!');
 		});
-		it('Calling suffix several times will add all suffixes to the following strings',function(){
-			var sb = new StringBuilder();
+		it('Calling suffix several times will add all suffixes to the following strings', function() {
+			var sb = new stringBuilder();
 			sb.suffix('?').suffix('!').cat('what').cat('when');
 
 			result = sb.string();
@@ -173,7 +173,7 @@ describe( 'StringBuilder', function() {
 
 	describe( '#end()', function(){
 		var result;
-		it('Will add a prefix and suffix to the string on the first cat, but not on the second',function(){
+		it('Using end without deep parameter will the wrap like effect added', function() {
 			var sb = new stringBuilder();
 			sb.cat('<ul>').wrap('<li>', '</li>').cat('list item').end().cat('</ul>');
 			result = sb.string();
@@ -181,13 +181,22 @@ describe( 'StringBuilder', function() {
 			expect(result).to.equal('<ul><li>list item</li></ul>');
 		});
 
-		it('Having called wrap-like methods several times, it will end the last effect added',function(){
+		it('Having called wrap-like methods several times,calling end without parameter will end the last effect added', function() {
 			var sb = new stringBuilder();
 			sb.cat('<ul>').wrap('<li>', '</li>').prefix('sub').cat('marine').end().cat('boat').end().cat('</ul>');
 			result = sb.string();
 
 			expect(result).to.equal('<ul><li>submarine</li><li>boat</li></ul>');
+		});
+		it('Passing a deep parameter, end() will undo the selected number of effects starting with the latest one', function() {
+			var sb = new stringBuilder();
+			sb.wrap('<li>', '</li>').prefix('sub').cat('marine').end(2).cat(' boat');
+			result = sb.string();
+
+			expect(result).to.equal('<li>submarine</li> boat')
+
 		})
+
 	});
 
 });
