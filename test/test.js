@@ -95,9 +95,26 @@ describe( 'StringBuilder', function() {
 			var sb = new stringBuilder();
 			sb.wrap('<li>', '</li>').cat('list item');
 			result = sb.string();
-
 			expect(result).to.equal('<li>list item</li>');
 		});
+
+		it('Given the arguments, will add the prefix to all strings concatenated after the wrap call', function(){
+			var sb = new stringBuilder();
+			sb.wrap('<li>', '</li>').cat('list item').rep('more list items', 3);
+			result = sb.string();
+
+			expect(result).to.equal('<li>list item</li><li>more list items</li><li>more list items</li><li>more list items</li>');
+		});
+
+		it('Calling the wrap more than once will wrap the next strings in all the wraps before', function(){ 
+			var sb = new stringBuilder();
+			sb.wrap('<div>', '</div>').wrap('<p>','</p>').cat('content');
+			result = sb.string();
+
+			expect(result).to.equal('<div><p>content</p></div>');
+		});	
+
+
 	});
 
 	describe( '#prefix()', function(){
@@ -109,6 +126,21 @@ describe( 'StringBuilder', function() {
 
 			expect(result).to.equal('-list item');
 		});
+		it('Given the arguments, will add prefix to all the following concatenated strings',function(){
+			var sb = new stringBuilder();
+			sb.prefix('sub').rep('marine ', 3);
+			result = sb.string();
+
+			expect(result).to.equal('submarine submarine submarine');
+		});
+		it('Calling prefix several times will add all prefixes to the following string',function(){
+			var sb = new stringBuilder();
+			sb.prefix('yellow').preix(' sub').cat('marine');
+			result = sb.string();
+
+			expect('result').to.equal('yellow submarine');
+		})
+
 	});
 
 	describe( '#suffix()', function(){
@@ -119,6 +151,23 @@ describe( 'StringBuilder', function() {
 			result = sb.string();
 
 			expect(result).to.equal('list item!');
+		});
+
+		it('Given the argument, will add the suffix to all the following concatenated strings',function(){
+			var sb = new StringBuilder();
+			sb.suffix('!').cat('this').cat('is').cat('sparta');
+			result = sb.string();
+
+			expect(result).to.equal('this!is!sparta!');
+		});
+		it('Calling suffix several times will add all suffixes to the following strings',function(){
+			var sb = new StringBuilder();
+			sb.suffix('?').suffix('!').cat('what').cat('when');
+
+			result = sb.string();
+
+			expect(result).to.equal('what!?when!?');
+
 		});
 	}); 
 
@@ -131,6 +180,14 @@ describe( 'StringBuilder', function() {
 
 			expect(result).to.equal('<ul><li>list item</li></ul>');
 		});
+
+		it('Having called wrap-like methods several times, it will end the last effect added',function(){
+			var sb = new stringBuilder();
+			sb.cat('<ul>').wrap('<li>', '</li>').prefix('sub').cat('marine').end().cat('boat').end().cat('</ul>');
+			result = sb.string();
+
+			expect(result).to.equal('<ul><li>submarine</li><li>boat</li></ul>');
+		})
 	});
 
 });
