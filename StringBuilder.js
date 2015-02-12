@@ -3,6 +3,8 @@
 
 	var strBuilder = function(){
 		this.buffer = [];
+		this.prefixes = [];
+		this.suffixes= [];
 	},
 
     isArray = function(value) {
@@ -15,18 +17,17 @@
 
     isNumber = function(n) {
     	return typeof n === "number" && isFinite(n);
-    }
- 
+    },
 
-	strBuilder.prototype = {
-		cat : function() {
-			var len = arguments.length,
-		i,
-		value,
-		result;
+    concatenate = function(){
+    	var len = arguments.length,
+    	i,
+    	value,
+    	result;
+
 		for ( i = 0; i < len ; i += 1 ) {
 			value = arguments[i];
-
+	
 			if( isFunction(value) ){				
 				result = value.apply(this);
 				this.cat.call(this, result);
@@ -37,8 +38,30 @@
 				this.buffer.push(value);
 			}
 		}
+    }
+ 
 
-		return this;
+	strBuilder.prototype = {
+		cat : function() {
+			var len = this.prefixes.length,
+			args = Array.prototype.slice.call(arguments),
+			i,
+			j = len - 1,
+			pref,
+			suff;
+
+	        for (i = 0; i < len; i += 1) {
+	            pref = this.prefixes[j];
+	            suff = this.suffixes[i];
+	            args.unshift(pref);
+	            args.push(suff);
+
+	            j -= 1;
+	        }
+
+	        concatenate.apply(this, args);
+
+			return this;
 		},
 
 		string : function(){
@@ -72,6 +95,39 @@
 			if( condition ) {
 				this.cat.apply(this, args)
 			}
+
+			return this;
+		},
+
+		wrap : function( prefix, suffix ) {
+			this.prefixes.push( prefix );
+			this.suffixes.unshift( suffix );
+
+			return this;
+		},
+
+		prefix : function( prefix ) {
+			this.wrap(prefix, '');
+
+			return this;
+		},
+		suffix : function( suffix ) {
+			this.wrap('', suffix);
+
+			return this;
+		},
+		end : function( deep ) {
+			var i,
+			howDeep = 1;
+
+			if ( isNumber( deep ) ) {
+				howDeep = deep; 
+			} 
+
+			for( i = 0; i < howDeep ; i += 1 ){
+				this.prefixes.pop();
+				this.suffixes.shift();
+			} 
 
 			return this;
 		}
