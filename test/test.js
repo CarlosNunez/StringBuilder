@@ -195,7 +195,51 @@ describe( 'StringBuilder', function() {
 
 			expect(result).to.equal('<li>submarine</li> boat')
 
-		})
+		});
+
+	});
+
+	describe( '#each()', function(){
+		var result,
+		people = [
+			{ name: 'pedro', sex: 'm', age: 30 },
+			{ name: 'leticia', sex: 'f', age: 21 },
+			{ name: 'pablo', sex: 'm', age: 20 }
+		];
+
+		it('Calling each() on the string builder will apply the function to each element in the given array ', function(){
+			var sb = new stringBuilder();
+			sb.each(people, function(value, index, thePeople){
+				this.cat(value.name, ' ');
+			});
+			result = sb.string();
+
+			expect(result).to.equal('pedro leticia pablo ');
+
+		});
+
+		it('Calling each() on the string builder will apply the function to each element in the given array ', function(){
+			var sb = new stringBuilder();
+			sb.each(people, function(value, index, thePeople){
+				this.cat('-').prefix(' ').cat(value.name).cat(value.sex).cat(value.age).end();
+			});
+			result = sb.string();
+
+			expect(result).to.equal('- pedro m 30- leticia f 21- pablo m 20');
+
+		});
+
+		it('Calling each() on the string builder will apply the function to each element in the given array ', function(){
+			var sb = new stringBuilder();
+			sb.cat('<ul>')
+			.each(people, function(value, index, thePeople){
+				this.cat('<li>').suffix(' ').cat(value.name).cat(value.sex).cat(value.age).end().cat('</li>');
+			}).cat('</ul>');
+			result = sb.string();
+
+			expect(result).to.equal('<ul><li>pedro m 20 </li><li>leticia f 21 </li><li>pablo m 20 </li></ul>');
+
+		});
 
 	});
 
