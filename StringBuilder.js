@@ -130,6 +130,21 @@
 			} 
 
 			return this;
+		},
+		each : function(args, callback) {
+			var length = args.length,
+                i,
+                value,
+                result;
+
+            for (i = 0; i < length; i += 1) {
+                value = [args[i], i, args];
+                result = callback.apply(this, value);
+
+                this.cat.apply(this, result);
+            }
+
+            return this;
 		}
 	}
 
