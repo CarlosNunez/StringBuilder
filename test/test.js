@@ -237,7 +237,20 @@ describe( 'StringBuilder', function() {
 			}).cat('</ul>');
 			result = sb.string();
 
-			expect(result).to.equal('<ul><li>pedro m 20 </li><li>leticia f 21 </li><li>pablo m 20 </li></ul>');
+			expect(result).to.equal('<ul><li>pedro m 30 </li><li>leticia f 21 </li><li>pablo m 20 </li></ul>');
+
+		});
+
+		it('Calling each() on the string builder after a wrap, the wrap will apply to every cat call inside the function given', function(){
+			var sb = new stringBuilder();
+			sb.cat('<ul>')
+			.wrap('<li>','</li>')
+			.each(people, function(value, index, thePeople){
+				this.cat(value.name).cat(value.age);
+			}).end().cat('</ul>');
+			result = sb.string();
+
+			expect(result).to.equal('<ul><li>pedro</li><li>30</li><li>leticia</li><li>21</li><li>pablo</li><li>m</li></ul>')
 
 		});
 
