@@ -138,8 +138,8 @@
                 result;
 
             for (i = 0; i < length; i += 1) {
-                value = [args[i], i, args];
-                result = callback.apply(this, value);
+                value = args[i];
+                result = callback.call(this, value, i, args);
 
                 if( !!result ) {
                 	this.cat.apply(this, result);
