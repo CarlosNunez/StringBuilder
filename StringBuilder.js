@@ -30,7 +30,10 @@
 	
 			if( isFunction(value) ){				
 				result = value.apply(this);
-				this.cat.call(this, result);
+
+				if ( !!result ) {
+					this.cat.call(this, result);
+				};
 
 			}else if( isArray(value) ) {
 				this.cat.apply(this, value); 
@@ -38,8 +41,9 @@
 				this.buffer.push(value);
 			}
 		}
-    }
- 
+    },
+ 	
+ 	halt = {}
 
 	strBuilder.prototype = {
 		cat : function() {
@@ -53,6 +57,11 @@
 	        for (i = 0; i < len; i += 1) {
 	            pref = this.prefixes[j];
 	            suff = this.suffixes[i];
+
+	            if(pref === halt){
+	            	break;
+	            }
+
 	            args.unshift(pref);
 	            args.push(suff);
 
@@ -142,11 +151,15 @@
                 result = callback.call(this, value, i, args);
 
                 if( !!result ) {
-                	this.cat.apply(this, result);
+                	this.cat.call(this, result);
             	}
             }
 
             return this;
+		},
+		suspend : function() {
+			this.wrap(halt,halt);
+			return this;
 		}
 	}
 
