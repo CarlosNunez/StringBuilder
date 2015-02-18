@@ -263,7 +263,16 @@ describe( 'StringBuilder', function() {
         it('Calling supsned will pause the applied effects letting others take effect, and will return previous effects on end call', function(){
             var sb = new stringBuilder();
 
-            result = sb.wrap('<p>','</p>').cat('paragraph1').cat('paragraph2').suspend().wrap('<div>','</div>').cat('div1').end(2).cat('paragraph3').string();
+            result = sb
+                    .wrap('<p>','</p>')
+                    .cat('paragraph1')
+                    .cat('paragraph2')
+                    .suspend()
+                    .wrap('<div>','</div>')
+                    .cat('div1')
+                    .end(2)
+                    .cat('paragraph3')
+                    .string();
 
             expect(result).to.equal('<p>paragraph1</p><p>paragraph2</p><div>div1</div><p>paragraph3</p>');
 
@@ -272,7 +281,7 @@ describe( 'StringBuilder', function() {
 		it('Calling suspend will pause the applied wrap/prefix/suffix effects, letting new ones take place, testing with "each" and other effects', function(){
 			var sb = new stringBuilder(),
 			    sections = ['section 1', 'section 2', 'section 3'];
-			sb
+			result = sb
 				.suffix('\n')
 				.cat('<body>')
 				.prefix('  ')
@@ -289,8 +298,8 @@ describe( 'StringBuilder', function() {
 						})	
 				})
 				.end(2)
-				.cat('</body>');
-			result = sb.string();
+				.cat('</body>').
+                string();
 
 			expected = '<body>\n'
                         +'  <section><h1>section 1</h1><p>first paragraph</p><p>second paragraph</p></section>\n'
