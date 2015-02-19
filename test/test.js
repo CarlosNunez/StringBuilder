@@ -311,4 +311,45 @@ describe( 'StringBuilder', function() {
 		});
 	});
 
+	describe( '#when', function(){
+		var result;
+		it('Given a true expresion. When will apply the first set of arguments.', function(){
+			var sb = new stringBuilder();
+			result = sb.cat('hello ')
+					.when(true, 'args', 'otherwiseargs')
+					.string();
+
+			expect(result).to.equal('hello args');
+		});
+		it('Given a false expresion. When will apply the first set of arguments.', function(){
+			var sb = new stringBuilder();
+			result = sb.cat('hello ')
+					.when(false, 'args', 'otherwiseargs')
+					.string();
+
+			expect(result).to.equal('hello otherwiseargs');
+
+		});
+		it('Given a function as expression, the function is executed to determine the result', function(){
+			var sb = new stringBuilder();
+				people = [
+						{ name: 'pedro', sex: 'm', age: 30 },
+						{ name: 'leticia', sex: 'f', age: 21 },
+						{ name: 'pablo', sex: 'm', age: 20 }
+				];
+			result = sb
+				.each(people, function(person){
+					this.when(person.sex == 'm', 
+						function(){
+							return person.name + ' is male ' ;
+						}, 
+						[ person.name, ' is female ' ]
+					);
+				}).string();
+			
+			expect(result).to.equal('pedro is male leticia is female pablo is male ')
+
+		});
+	});
+
 });
